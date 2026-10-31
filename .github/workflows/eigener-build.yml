@@ -1,0 +1,31 @@
+name: Eigener Build (Faktor 1,4)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Signaturschluessel erzeugen
+      run: |
+        mkdir -p ~/.android
+        keytool -genkeypair -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+
+    - name: App bauen
+      run: |
+        chmod +x gradlew
+        ./gradlew assembleRelease
+
+    - name: Installationsdatei bereitstellen
+      uses: actions/upload-artifact@v4
+      with:
+        name: grupetto-faktor-1-4
+        path: app/build/outputs/apk/release/*.apk
