@@ -125,7 +125,7 @@ class V1NewCombinedSensor(
                         
                         if (bikeData != null) {
                             // Power is divided by 100.0f
-                            mutablePower.tryEmit(bikeData.power.toFloat() / 100.0f)
+                            mutablePower.tryEmit(bikeData.power.toFloat() / 100.0f * 1.4f)
                             // RPM
                             mutableCadence.tryEmit(bikeData.rpm.toFloat())
                             // Resistance see V1ResistanceSensor.kt
